@@ -37,8 +37,7 @@ namespace Assessment.Core.Logic.Topups.Command
             {
                 return new TopUpResult { Success = false, Message = "User not found." };
             }
-
-            var beneficiary = await _beneficiaryRepository.GetByIdAsync(request.BeneficiaryId);
+            var beneficiary = user.Beneficiaries.FirstOrDefault(b => b.Id == request.BeneficiaryId);
             if (beneficiary == null || beneficiary.UserId != request.UserId)
             {
                 return new TopUpResult { Success = false, Message = "Beneficiary not found or does not belong to the user." };

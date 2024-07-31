@@ -22,11 +22,13 @@ namespace Assessment.Infrastructure.Data
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<TopUpTransaction>().HasOne(x=>x.User).WithMany(e=>e.TopUpTransactions).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<TopUpTransaction>().HasOne(x => x.User).WithMany(e => e.TopUpTransactions).OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Beneficiary>().HasKey(b => b.Id);
+
             base.OnModelCreating(modelBuilder);
-            
+
         }
-     
+
     }
 
 }

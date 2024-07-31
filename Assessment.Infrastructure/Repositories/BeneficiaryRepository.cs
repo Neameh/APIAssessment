@@ -22,7 +22,8 @@ namespace Assessment.Infrastructure.Repositories
 
         public async Task<Beneficiary> GetByIdAsync(int id)
         {
-            return await _context.Beneficiaries.FindAsync(id);
+            var result = _context.Beneficiaries.FirstOrDefaultAsync(a => a.Id == id);
+            return await result;
         }
 
         public async Task AddAsync(Beneficiary beneficiary)

@@ -29,7 +29,6 @@ namespace Assessment.Core.Logic.Beneficiaries.Command
             {
                 throw new DomainException("User not found.");
             }
-
             if (user.Beneficiaries == null)
             {
                 user.Beneficiaries = new List<Beneficiary>();
@@ -38,9 +37,9 @@ namespace Assessment.Core.Logic.Beneficiaries.Command
             {
                 throw new DomainException("Cannot add more than 5 beneficiaries.");
             }
-
             var beneficiary = new Beneficiary
             {
+              
                 UserId = request.UserId,
                 NickName = request.Nickname
             };

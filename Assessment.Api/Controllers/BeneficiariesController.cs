@@ -3,6 +3,7 @@ using Assessment.Core.Logic.Beneficiaries.Queries;
 using Assessment.Core;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 
 namespace Assessment.Api.Controllers
@@ -21,16 +22,37 @@ namespace Assessment.Api.Controllers
         [HttpPost]
         public async Task<ActionResult<int>> Add(AddBeneficiaryCommand command)
         {
-            var result = await _mediator.Send(command);
-            return Ok(result);
+            try
+            {
+                var result = await _mediator.Send(command);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
         [HttpGet("{userId}")]
         public async Task<ActionResult<List<BeneficiaryDto>>> Get(int userId)
         {
-            var query = new GetBeneficiariesQuery { UserId = userId };
-            var result = await _mediator.Send(query);
-            return Ok(result);
+            try
+            {
+                // Check if the user exists
+                var userExists = await _mediator.Send(new CheckUserExistenceQuery { UserId = userId });
+                if (!userExists)
+                {
+                    return NotFound($"User with ID {userId} not found.");
+                }
+                var query = new GetBeneficiariesQuery { UserId = userId };
+                var result = await _mediator.Send(query);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
     }
 }

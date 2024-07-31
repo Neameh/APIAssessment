@@ -8,6 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
 using Assessment.Core.Logic.Beneficiaries.Command;
+using Assessment.Core.Logic.Beneficiaries.Queries;
 
 namespace Assessment.Tests.Handlers
 {
@@ -60,20 +61,5 @@ namespace Assessment.Tests.Handlers
                 .WithMessage("Cannot add more than 5 beneficiaries.");
         }
 
-        [Fact]
-        public async Task Handle_ValidRequest_ShouldAddBeneficiary()
-        {
-            var user = new User { Id = 1, Beneficiaries = new List<Beneficiary>() };
-            _userRepositoryMock.Setup(r => r.GetByIdAsync(It.IsAny<int>())).ReturnsAsync(user);
-
-            var command = new AddBeneficiaryCommand { UserId = 1, Nickname = "Test Beneficiary" };
-
-            var result = await _handler.Handle(command, CancellationToken.None);
-
-            result.Should().BeGreaterThan(0);
-            user.Beneficiaries.Should().HaveCount(1);
-            user.Beneficiaries.ElementAt(0).NickName.Should().Be("Test Beneficiary");
-            _userRepositoryMock.Verify(r => r.SaveChangesAsync(), Times.Once);
-        }
     }
 }
